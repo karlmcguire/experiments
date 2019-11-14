@@ -1,0 +1,3 @@
+Get:
+    - retrieve the value from the hashmap
+    - increment hit counter for the key (metadata)
