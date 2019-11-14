@@ -42,7 +42,6 @@ type shardItem struct {
 	val  interface{}
 	cost int64
 	ttl  int64
-	hits uint64
 }
 
 func newShard(size uint64) *shard {
