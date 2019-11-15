@@ -44,14 +44,15 @@ func (c *Cache) Set(key, val, cost, ttl uint64) []uint64 {
 		// check if items with set TTLs have expired first
 		for e := c.times.Back(); e != nil; e = e.Prev() {
 			item := e.Value.([3]uint64)
-			now := uint64(time.Now().Unix())
-			if item[2] < now {
+			if item[2] < uint64(time.Now().Unix()) {
 				c.times.Remove(e)
 				delete(c.data, item[0])
 				c.used -= item[1]
 				victims = append(victims, item[0])
 			}
 		}
+		// regular cost-based eviction
+		// TODO
 	}
 add:
 	c.data[key] = val
