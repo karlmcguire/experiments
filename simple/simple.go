@@ -1,7 +1,6 @@
 package simple
 
 import (
-	"fmt"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -22,6 +21,10 @@ type item struct {
 
 func (i *item) priority() float64 {
 	return float64(i.hits) / float64(time.Now().Unix()-i.created)
+}
+
+func (i *item) weightedPriority() float64 {
+	return (1.0 / float64(i.cost)) * i.priority()
 }
 
 func NewCache(capacity uint64) *Cache {
@@ -58,8 +61,7 @@ func (c *Cache) Set(key uint64, val interface{}, cost uint64) []uint64 {
 		minKey, minItem := uint64(0), &item{}
 		c.data.Range(func(k, v interface{}) bool {
 			candidate := v.(*item)
-			fmt.Printf("%d : %.8f\n", k.(uint64), candidate.priority())
-			if i == 0 || candidate.priority() < minItem.priority() {
+			if i == 0 || candidate.priority() < minItem.weightedPriority() {
 				minKey, minItem = k.(uint64), candidate
 			}
 			if i++; i == 5 {
