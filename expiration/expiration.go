@@ -46,6 +46,7 @@ func (c *Cache) Set(key, val, cost, ttl uint64) []uint64 {
 			item := e.Value.([3]uint64)
 			now := uint64(time.Now().Unix())
 			if item[2] < now {
+				c.times.Remove(e)
 				delete(c.data, item[0])
 				c.used -= item[1]
 				victims = append(victims, item[0])
