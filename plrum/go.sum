@@ -1,6 +1,14 @@
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
+github.com/OneOfOne/xxhash v1.2.6/go.mod h1:eZbhyaAYD41SGSSsnmcpxVoRiQ/MPUTjUdIIOT9Um7Q=
 github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=
+github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
+github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/karlmcguire/plrum v0.0.0-20191119012423-1de98dc55d1f h1:GnLnH+YqtkXgxuTpSwma+fFsNnZkLMrLYNAiGmR0+eg=
 github.com/karlmcguire/plrum v0.0.0-20191119012423-1de98dc55d1f/go.mod h1:napeGYhSBgneG/SYwQApKj0cXsmqKh+H1r/NiBJ9SEs=
+github.com/karlmcguire/plrum v0.0.0-20191119213618-8e7b22a5dce9 h1:lNnPxoA+u2jKTCKAf2Qio/9Si8DsDJTl+YByJSqvmxw=
+github.com/karlmcguire/plrum v0.0.0-20191119213618-8e7b22a5dce9/go.mod h1:napeGYhSBgneG/SYwQApKj0cXsmqKh+H1r/NiBJ9SEs=
+github.com/karlmcguire/plrum v0.0.0-20191119213910-2264d713ad78 h1:+V5iw0CcN+Nuj+eCQisc8RYcDuw5wCxMFzQuf3XnLdI=
+github.com/karlmcguire/plrum v0.0.0-20191119213910-2264d713ad78/go.mod h1:napeGYhSBgneG/SYwQApKj0cXsmqKh+H1r/NiBJ9SEs=
 github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
+github.com/spaolacci/murmur3 v1.1.0/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=

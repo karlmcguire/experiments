@@ -6,17 +6,24 @@ import (
 )
 
 func TestSet(t *testing.T) {
-	c := NewCache(64)
-	for i := uint64(0); i < 256; i++ {
+	c := NewCache(128)
+	rounds := uint64(128)
+	for i := uint64(0); i < rounds; i++ {
 		c.Set(i, []byte(fmt.Sprintf("%d", i)))
 	}
-	for i := uint64(0); i < 256; i++ {
+	fmt.Println(c)
+	fmt.Println()
+	fmt.Printf("%064b\n", c.meta[0])
+	fmt.Printf("%064b\n", c.meta[1])
+	fmt.Println()
+	for i := uint64(0); i < rounds; i++ {
 		val := c.Get(i)
 		if val == nil {
 			continue
 		}
 		if string(val) != fmt.Sprintf("%d", i) {
-			t.Fatal("key != value")
+			fmt.Printf("get %d: %s\n", i, string(c.Get(i)))
+			//t.Fatal("key != value")
 		}
 	}
 }

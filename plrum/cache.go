@@ -52,15 +52,18 @@ func (c *Cache) Set(key uint64, val []byte) (victim uint64) {
 	}
 	// find a new open block
 	block := c.meta.Evict()
-	c.meta.Hit(block)
-	if c.used > c.mask {
+	// check if eviction is needed
+	if c.used > c.mask || c.data[block].val != nil {
 		victim = c.data[block].key
+		fmt.Printf("evicting %d\n", c.data[block].key)
 		delete(c.keys, victim)
-		c.used--
+		goto add
 	}
+	c.used++
+add:
 	c.keys[key] = block
 	c.data[block] = item{key, val}
-	c.used++
+	c.meta.Hit(block)
 	return
 }
 
@@ -71,7 +74,7 @@ func (c *Cache) String() string {
 		if i%8 == 0 {
 			out += "\n"
 		}
-		out += fmt.Sprintf("%2d: %d  ", i, c.data[i].key)
+		out += fmt.Sprintf("%3d: %3d  ", i, c.data[i].key)
 	}
-	return out + "]"
+	return out + "\n]"
 }
