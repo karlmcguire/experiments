@@ -3,13 +3,18 @@ package cache
 import (
 	"sync"
 
-	"github.com/cespare/xxhash"
 	"github.com/karlmcguire/plrum"
 )
 
+type item struct {
+	key uint64
+	val []byte
+}
+
 type Cache struct {
-	sync.RWMutex
-	data [][]byte
+	sync.Mutex
+	keys map[uint64]uint64
+	data []item
 	meta plrum.Policy
 	mask uint64
 	used uint64
@@ -17,33 +22,40 @@ type Cache struct {
 
 func NewCache(size uint64) *Cache {
 	return &Cache{
-		data: make([][]byte, size),
+		keys: make(map[uint64]uint64, size),
+		data: make([]item, size),
 		meta: plrum.NewPolicy(size),
 		mask: size - 1,
 	}
 }
 
-func (c *Cache) Get(key []byte) []byte {
-	id := xxhash.Sum64(key) & c.mask
-	c.RLock()
-	defer c.RUnlock()
-	val := c.data[id]
-	c.meta.Hit(id)
-	return val
-}
-
-func (c *Cache) Set(key []byte, val []byte) uint64 {
-	id := xxhash.Sum64(key) & c.mask
+func (c *Cache) Get(key uint64) []byte {
 	c.Lock()
 	defer c.Unlock()
+	block := c.keys[key]
+	c.meta.Hit(block)
+	return c.data[block].val
+}
+
+func (c *Cache) Set(key uint64, val []byte) (victim uint64) {
+	c.Lock()
+	defer c.Unlock()
+	// if already exists, just update
+	if block, ok := c.keys[key]; ok {
+		c.data[block].val = val
+		c.meta.Hit(block)
+		return
+	}
+	// find a new open block
+	block := c.meta.Evict()
 	if c.used > c.mask {
-		victim := c.meta.Evict()
-		c.data[victim] = nil
-		id = victim
+		victim = c.data[block].key
+		delete(c.keys, victim)
 		c.used--
 	}
-	c.data[id] = val
-	c.meta.Hit(id)
+	c.keys[key] = block
+	c.data[block] = item{key, val}
+	c.meta.Hit(block)
 	c.used++
-	return 0
+	return
 }
