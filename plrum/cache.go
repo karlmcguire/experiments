@@ -3,6 +3,7 @@ package cache
 import (
 	"sync"
 
+	"github.com/cespare/xxhash"
 	"github.com/karlmcguire/plrum"
 )
 
@@ -22,8 +23,8 @@ func NewCache(size uint64) *Cache {
 	}
 }
 
-func (c *Cache) Get(key uint64) []byte {
-	id := key & c.mask
+func (c *Cache) Get(key []byte) []byte {
+	id := xxhash.Sum64(key) & c.mask
 	c.RLock()
 	val := c.data[id]
 	c.meta.Hit(id)
@@ -31,8 +32,8 @@ func (c *Cache) Get(key uint64) []byte {
 	return val
 }
 
-func (c *Cache) Set(key uint64, val []byte) uint64 {
-	id := key & c.mask
+func (c *Cache) Set(key []byte, val []byte) uint64 {
+	id := xxhash.Sum64(key) & c.mask
 	c.Lock()
 	victim := c.meta.Evict()
 	c.data[victim] = nil
