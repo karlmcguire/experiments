@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/karlmcguire/plrum"
@@ -32,7 +33,10 @@ func NewCache(size uint64) *Cache {
 func (c *Cache) Get(key uint64) []byte {
 	c.Lock()
 	defer c.Unlock()
-	block := c.keys[key]
+	block, ok := c.keys[key]
+	if !ok {
+		return nil
+	}
 	c.meta.Hit(block)
 	return c.data[block].val
 }
@@ -42,12 +46,13 @@ func (c *Cache) Set(key uint64, val []byte) (victim uint64) {
 	defer c.Unlock()
 	// if already exists, just update
 	if block, ok := c.keys[key]; ok {
-		c.data[block].val = val
 		c.meta.Hit(block)
+		c.data[block].val = val
 		return
 	}
 	// find a new open block
 	block := c.meta.Evict()
+	c.meta.Hit(block)
 	if c.used > c.mask {
 		victim = c.data[block].key
 		delete(c.keys, victim)
@@ -55,7 +60,18 @@ func (c *Cache) Set(key uint64, val []byte) (victim uint64) {
 	}
 	c.keys[key] = block
 	c.data[block] = item{key, val}
-	c.meta.Hit(block)
 	c.used++
 	return
+}
+
+func (c *Cache) String() string {
+	var out string
+	out = "[ "
+	for i := uint64(0); i <= c.mask; i++ {
+		if i%8 == 0 {
+			out += "\n"
+		}
+		out += fmt.Sprintf("%2d: %d  ", i, c.data[i].key)
+	}
+	return out + "]"
 }

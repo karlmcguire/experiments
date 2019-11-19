@@ -7,20 +7,37 @@ import (
 
 func TestSet(t *testing.T) {
 	c := NewCache(64)
-
-	for i := uint64(0); i < 64; i++ {
-		c.Set(i, []byte("data"))
+	for i := uint64(0); i < 256; i++ {
+		c.Set(i, []byte(fmt.Sprintf("%d", i)))
 	}
+	for i := uint64(0); i < 256; i++ {
+		val := c.Get(i)
+		if val == nil {
+			continue
+		}
+		if string(val) != fmt.Sprintf("%d", i) {
+			t.Fatal("key != value")
+		}
+	}
+}
 
-	fmt.Printf("used: %d\n", len(c.keys))
-	fmt.Printf("%064b\n", c.meta[0])
+func BenchmarkGet(b *testing.B) {
+	c := NewCache(64)
+	c.Set(0, []byte("data"))
+	b.SetBytes(1)
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			c.Get(0)
+		}
+	})
+}
 
-	fmt.Println(c.Set(3255, []byte("data")))
-	fmt.Printf("used: %d\n", len(c.keys))
-	fmt.Printf("%064b\n", c.meta[0])
-
-	fmt.Println(c.Set(32, []byte("data")))
-	fmt.Printf("used: %d\n", len(c.keys))
-	fmt.Printf("%064b\n", c.meta[0])
-
+func BenchmarkSet(b *testing.B) {
+	c := NewCache(64)
+	b.SetBytes(1)
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			c.Set(0, []byte("data"))
+		}
+	})
 }
