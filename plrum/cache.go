@@ -26,18 +26,24 @@ func NewCache(size uint64) *Cache {
 func (c *Cache) Get(key []byte) []byte {
 	id := xxhash.Sum64(key) & c.mask
 	c.RLock()
+	defer c.RUnlock()
 	val := c.data[id]
 	c.meta.Hit(id)
-	c.RUnlock()
 	return val
 }
 
 func (c *Cache) Set(key []byte, val []byte) uint64 {
 	id := xxhash.Sum64(key) & c.mask
 	c.Lock()
-	victim := c.meta.Evict()
-	c.data[victim] = nil
+	defer c.Unlock()
+	if c.used > c.mask {
+		victim := c.meta.Evict()
+		c.data[victim] = nil
+		id = victim
+		c.used--
+	}
 	c.data[id] = val
-	c.Unlock()
-	return victim
+	c.meta.Hit(id)
+	c.used++
+	return 0
 }
