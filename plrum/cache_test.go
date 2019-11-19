@@ -12,10 +12,6 @@ func TestSet(t *testing.T) {
 		c.Set(i, []byte(fmt.Sprintf("%d", i)))
 	}
 	fmt.Println(c)
-	fmt.Println()
-	fmt.Printf("%064b\n", c.meta[0])
-	fmt.Printf("%064b\n", c.meta[1])
-	fmt.Println()
 	for i := uint64(0); i < rounds; i++ {
 		val := c.Get(i)
 		if val == nil {

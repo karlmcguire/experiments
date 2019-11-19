@@ -10,5 +10,7 @@ github.com/karlmcguire/plrum v0.0.0-20191119213618-8e7b22a5dce9 h1:lNnPxoA+u2jKT
 github.com/karlmcguire/plrum v0.0.0-20191119213618-8e7b22a5dce9/go.mod h1:napeGYhSBgneG/SYwQApKj0cXsmqKh+H1r/NiBJ9SEs=
 github.com/karlmcguire/plrum v0.0.0-20191119213910-2264d713ad78 h1:+V5iw0CcN+Nuj+eCQisc8RYcDuw5wCxMFzQuf3XnLdI=
 github.com/karlmcguire/plrum v0.0.0-20191119213910-2264d713ad78/go.mod h1:napeGYhSBgneG/SYwQApKj0cXsmqKh+H1r/NiBJ9SEs=
+github.com/karlmcguire/plrum v0.0.0-20191119223922-b30d69793aec h1:jnBQm86cI6j+Cq4SILGYmHOo/qv4MYwekTZYO3INNBA=
+github.com/karlmcguire/plrum v0.0.0-20191119223922-b30d69793aec/go.mod h1:napeGYhSBgneG/SYwQApKj0cXsmqKh+H1r/NiBJ9SEs=
 github.com/spaolacci/murmur3 v0.0.0-20180118202830-f09979ecbc72/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=
 github.com/spaolacci/murmur3 v1.1.0/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2Kzu9HwQUA=

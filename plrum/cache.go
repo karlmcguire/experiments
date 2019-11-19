@@ -16,7 +16,7 @@ type Cache struct {
 	sync.Mutex
 	keys map[uint64]uint64
 	data []item
-	meta plrum.Policy
+	meta *plrum.Policy
 	mask uint64
 	used uint64
 }
@@ -55,6 +55,7 @@ func (c *Cache) Set(key uint64, val []byte) (victim uint64) {
 	// check if eviction is needed
 	if c.used > c.mask || c.data[block].val != nil {
 		victim = c.data[block].key
+		fmt.Printf("evicting %d\n", c.data[block].key)
 		delete(c.keys, victim)
 		goto add
 	}
