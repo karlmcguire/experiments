@@ -23,8 +23,8 @@ type Cache struct {
 
 func NewCache(size uint64) *Cache {
 	return &Cache{
-		keys: make(map[uint64]uint64, size),
-		data: make([]item, size),
+		keys: make(map[uint64]uint64, size+1),
+		data: make([]item, size+1),
 		meta: plru.NewPolicy(size),
 		mask: size - 1,
 	}
