@@ -22,9 +22,10 @@ type Cache struct {
 }
 
 func NewCache(size uint64) *Cache {
+	size = 64 * ((size + 32) / 64)
 	return &Cache{
-		keys: make(map[uint64]uint64, size+1),
-		data: make([]item, size+1),
+		keys: make(map[uint64]uint64, size),
+		data: make([]item, size),
 		meta: plru.NewPolicy(size),
 		mask: size - 1,
 	}
