@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/karlmcguire/plrum"
+	"github.com/karlmcguire/plru"
 )
 
 type item struct {
@@ -13,10 +13,10 @@ type item struct {
 }
 
 type Cache struct {
-	sync.Mutex
+	sync.RWMutex
 	keys map[uint64]uint64
 	data []item
-	meta *plrum.Policy
+	meta *plru.Policy
 	mask uint64
 	used uint64
 }
@@ -25,15 +25,15 @@ func NewCache(size uint64) *Cache {
 	return &Cache{
 		keys: make(map[uint64]uint64, size),
 		data: make([]item, size),
-		meta: plrum.NewPolicy(size),
+		meta: plru.NewPolicy(size),
 		mask: size - 1,
 	}
 }
 
 func (c *Cache) Get(key uint64) []byte {
-	c.Lock()
-	defer c.Unlock()
+	c.RLock()
 	block, ok := c.keys[key]
+	c.RUnlock()
 	if !ok {
 		return nil
 	}
