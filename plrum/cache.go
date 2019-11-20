@@ -53,7 +53,6 @@ func (c *Cache) Set(key uint64, val []byte) (victim uint64) {
 	}
 	// find a new open block
 	block := c.meta.Evict()
-	fmt.Println(len(c.data), block)
 	// check if eviction is needed
 	if c.used > c.mask || c.data[block].val != nil {
 		victim = c.data[block].key
